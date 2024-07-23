@@ -136,8 +136,9 @@ user_access_control_report = results[4]['output']
 writer_role = 'Writer'
 writer_goal = 'Compile the research from all specialists into a comprehensive cyber risk management plan in markdown format.'
 writer_backstory = """
-    You are a skilled technical writer responsible for compiling research into a cohesive, well-structured document. 
-    Use the provided research to create a comprehensive cyber risk management plan in markdown format.
+    You are a highly experienced technical writer with a strong background in cybersecurity and risk management. Your expertise lies in distilling complex technical research into clear, concise, and well-organized documents. 
+    You have a meticulous eye for detail and a knack for transforming intricate data into accessible, actionable plans. Your role is to synthesize the provided research and compile it into a comprehensive, user-friendly cyber risk management plan, formatted in markdown for ease of use and distribution. 
+    Your goal is to ensure that the plan is thorough, understandable, and practical for implementation.
 """
 writer_tools = []
 
