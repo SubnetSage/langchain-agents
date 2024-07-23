@@ -2,7 +2,7 @@ from crewai import Agent, Task, Crew
 from langchain_community.llms import Ollama
 from langchain_community.tools import DuckDuckGoSearchRun
 from crewai_tools import tool
-import PyPDF2
+from PyPDF2 import PdfReader
 
 # Initialize the LLM model
 ollama_llm = Ollama(model="llama3")
@@ -16,11 +16,9 @@ def ddgsearch(question: str) -> str:
 # Function to read the PDF guide
 def read_pdf(file_path):
     text = ""
-    with open(file_path, "rb") as file:
-        reader = PyPDF2.PdfFileReader(file)
-        for page_num in range(len(reader.pages)):
-            page = reader.getPage(page_num)
-            text += page.extractText()
+    reader = PdfReader(file_path)
+    for page in reader.pages:
+        text += page.extract_text()
     return text
 
 # Load the NIST Special Publication 800-37
