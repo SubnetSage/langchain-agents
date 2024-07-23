@@ -18,13 +18,13 @@ def read_pdf(file_path):
     text = ""
     with open(file_path, "rb") as file:
         reader = PyPDF2.PdfFileReader(file)
-        for page_num in range(reader.getNumPages()):
+        for page_num in range(len(reader.pages)):
             page = reader.getPage(page_num)
             text += page.extractText()
     return text
 
-# Load the Computer Security Incident Handling Guide
-incident_handling_guide_text = read_pdf("path/to/incident_handling_guide.pdf")
+# Load the NIST Special Publication 800-37
+nist_guide_text = read_pdf("path/to/NIST_SP_800-37.pdf")
 
 # Template for agent creation
 def create_agent(role, goal, backstory, tools, llm, verbose=True, allow_delegation=True):
@@ -53,8 +53,9 @@ network_specialist_role = 'Network Infrastructure Specialist'
 network_specialist_goal = 'Research and identify best practices for securing network infrastructure in small businesses.'
 network_specialist_backstory = f"""
     You are a network infrastructure specialist responsible for researching the best practices for securing network infrastructure, tailored for small businesses. 
-    Ensure all findings and recommendations comply with the Computer Security Incident Handling Guide.
-    Here is the guide for reference: {incident_handling_guide_text[:500]}... (truncated)
+    Ensure all findings and recommendations comply with the NIST Special Publication 800-37.
+    Here is the guide for reference: {nist_guide_text[:500]}... (truncated)
+    Use the DuckDuckGoSearch tool to assist in your research.
 """
 network_specialist_tools = [ddgsearch]
 
@@ -63,8 +64,9 @@ app_security_specialist_role = 'Application Security Specialist'
 app_security_specialist_goal = 'Research best practices for securing enterprise applications used by small businesses.'
 app_security_specialist_backstory = f"""
     You are an application security specialist focusing on researching the best practices for securing enterprise applications used by small businesses. 
-    Ensure all findings and recommendations comply with the Computer Security Incident Handling Guide.
-    Here is the guide for reference: {incident_handling_guide_text[:500]}... (truncated)
+    Ensure all findings and recommendations comply with the NIST Special Publication 800-37.
+    Here is the guide for reference: {nist_guide_text[:500]}... (truncated)
+    Use the DuckDuckGoSearch tool to assist in your research.
 """
 app_security_specialist_tools = [ddgsearch]
 
@@ -73,8 +75,9 @@ data_security_specialist_role = 'Data Security Specialist'
 data_security_specialist_goal = 'Research best practices for securing data storage and handling processes in small businesses.'
 data_security_specialist_backstory = f"""
     You are a data security specialist responsible for researching the best practices for securing data storage, transmission, and handling processes in small businesses. 
-    Ensure all findings and recommendations comply with the Computer Security Incident Handling Guide.
-    Here is the guide for reference: {incident_handling_guide_text[:500]}... (truncated)
+    Ensure all findings and recommendations comply with the NIST Special Publication 800-37.
+    Here is the guide for reference: {nist_guide_text[:500]}... (truncated)
+    Use the DuckDuckGoSearch tool to assist in your research.
 """
 data_security_specialist_tools = [ddgsearch]
 
@@ -83,8 +86,9 @@ compliance_specialist_role = 'Compliance Specialist'
 compliance_specialist_goal = 'Research compliance requirements and best practices for small businesses to follow relevant regulations and standards.'
 compliance_specialist_backstory = f"""
     You are a compliance specialist responsible for researching compliance requirements and best practices for small businesses to ensure adherence to relevant regulations and industry standards. 
-    Ensure all findings and recommendations comply with the Computer Security Incident Handling Guide.
-    Here is the guide for reference: {incident_handling_guide_text[:500]}... (truncated)
+    Ensure all findings and recommendations comply with the NIST Special Publication 800-37.
+    Here is the guide for reference: {nist_guide_text[:500]}... (truncated)
+    Use the DuckDuckGoSearch tool to assist in your research.
 """
 compliance_specialist_tools = [ddgsearch]
 
@@ -93,8 +97,9 @@ user_access_control_specialist_role = 'User Access Control Specialist'
 user_access_control_specialist_goal = 'Research best practices for implementing effective user access controls and policies in small businesses.'
 user_access_control_specialist_backstory = f"""
     You are a user access control specialist focusing on researching the best practices for implementing effective user access controls and policies in small businesses. 
-    Ensure all findings and recommendations comply with the Computer Security Incident Handling Guide.
-    Here is the guide for reference: {incident_handling_guide_text[:500]}... (truncated)
+    Ensure all findings and recommendations comply with the NIST Special Publication 800-37.
+    Here is the guide for reference: {nist_guide_text[:500]}... (truncated)
+    Use the DuckDuckGoSearch tool to assist in your research.
 """
 user_access_control_specialist_tools = [ddgsearch]
 
@@ -107,13 +112,9 @@ user_access_control_specialist = create_agent(user_access_control_specialist_rol
 
 # Create tasks using the template
 task1 = create_task(network_specialist, "Research and identify best practices for securing network infrastructure in small businesses.", "A detailed report on best practices for securing network infrastructure tailored for small businesses.")
-
 task2 = create_task(app_security_specialist, "Research best practices for securing enterprise applications used by small businesses.", "A comprehensive report on best practices for securing enterprise applications used by small businesses.")
-
 task3 = create_task(data_security_specialist, "Research best practices for securing data storage and handling processes in small businesses.", "A thorough report on best practices for securing data storage and handling processes in small businesses.")
-
 task4 = create_task(compliance_specialist, "Research compliance requirements and best practices for small businesses to follow relevant regulations and standards.", "A detailed report on compliance requirements and best practices for small businesses.")
-
 task5 = create_task(user_access_control_specialist, "Research best practices for implementing effective user access controls and policies in small businesses.", "A comprehensive report on best practices for implementing effective user access controls and policies in small businesses.")
 
 # Instantiate the Crew with a collaborative process
