@@ -22,7 +22,7 @@ def read_pdf(file_path):
     return text
 
 # Load the NIST Special Publication 800-37
-nist_guide_text = read_pdf("path/to/NIST_SP_800-37.pdf")
+nist_guide_text = read_pdf("NIST.SP.800-37r2.pdf")
 
 # Template for agent creation
 def create_agent(role, goal, backstory, tools, llm, verbose=True, allow_delegation=True):
@@ -123,7 +123,7 @@ crew = Crew(
 )
 
 # Get the crew to start working
-result = crew.kickoff()
+results = crew.kickoff()
 
 # Combine all recommendations into a single markdown file
 report_content = """
@@ -145,11 +145,11 @@ report_content = """
 {}
 """
 
-network_report = task1.get_output()
-app_security_report = task2.get_output()
-data_security_report = task3.get_output()
-compliance_report = task4.get_output()
-user_access_control_report = task5.get_output()
+network_report = results[0]['output']
+app_security_report = results[1]['output']
+data_security_report = results[2]['output']
+compliance_report = results[3]['output']
+user_access_control_report = results[4]['output']
 
 final_report = report_content.format(network_report, app_security_report, data_security_report, compliance_report, user_access_control_report)
 
