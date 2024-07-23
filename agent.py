@@ -122,40 +122,61 @@ crew = Crew(
     verbose=2  # Adjust the logging level as needed (1 or 2)
 )
 
-# Get the crew to start working
+# Get the crew to start working on the initial research tasks
 results = crew.kickoff()
 
-# Combine all recommendations into a single markdown file
-report_content = """
-# Cyber Risk Management Plan for Small Business
-
-## Network Infrastructure Security
-{}
-
-## Application Security
-{}
-
-## Data Security
-{}
-
-## Compliance Requirements
-{}
-
-## User Access Control
-{}
-"""
-
+# Extract the outputs from the initial research tasks
 network_report = results[0]['output']
 app_security_report = results[1]['output']
 data_security_report = results[2]['output']
 compliance_report = results[3]['output']
 user_access_control_report = results[4]['output']
 
-final_report = report_content.format(network_report, app_security_report, data_security_report, compliance_report, user_access_control_report)
+# Define the Writer agent
+writer_role = 'Writer'
+writer_goal = 'Compile the research from all specialists into a comprehensive cyber risk management plan in markdown format.'
+writer_backstory = """
+    You are a skilled technical writer responsible for compiling research into a cohesive, well-structured document. 
+    Use the provided research to create a comprehensive cyber risk management plan in markdown format.
+"""
+writer_tools = []
 
-# Save the report to a .md file
-report_filename = "Cyber_Risk_Management_Plan.md"
-with open(report_filename, "w") as report_file:
-    report_file.write(final_report)
+writer = create_agent(writer_role, writer_goal, writer_backstory, writer_tools, ollama_llm)
 
-print(f"Cyber risk management plan has been saved to {report_filename}")
+# Create the writing task for the Writer agent
+writing_task_description = f"""
+Compile the following research into a comprehensive cyber risk management plan in markdown format:
+
+## Network Infrastructure Security
+{network_report}
+
+## Application Security
+{app_security_report}
+
+## Data Security
+{data_security_report}
+
+## Compliance Requirements
+{compliance_report}
+
+## User Access Control
+{user_access_control_report}
+"""
+writing_task_expected_output = "A markdown formatted document containing the comprehensive cyber risk management plan."
+
+writing_task = create_task(writer, writing_task_description, writing_task_expected_output)
+
+# Add the writing task to a new Crew and kick it off
+writing_crew = Crew(
+    agents=[writer],
+    tasks=[writing_task],
+    verbose=2
+)
+
+writing_results = writing_crew.kickoff()
+
+# Get the final markdown content from the writer
+final_report = writing_results[0]['output']
+
+# Print the final report
+print(final_report)
